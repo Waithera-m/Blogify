@@ -1,6 +1,6 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from blog.models import Post
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.core.exceptions import ObjectDoesNotExist
 from django.views import generic
 from blog.forms import PostForm
@@ -22,8 +22,9 @@ def create_post(request):
     if request.method == 'POST':
         form = PostForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('blog:posts_home')
+            post = form.save(commit=False)
+            post.save()
+            return HttpResponseRedirect(post.get_absolute_url())
     else:
         form = PostForm()
         context = {
@@ -31,8 +32,19 @@ def create_post(request):
         }
     return render(request, 'blog/new_post.html', context)
 
-def update_post(request):
-    return HttpResponse('<h1>We have posts</h1>')
+def update_post(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    form = PostForm(request.POST or None, instance=post)
+    if form.is_valid():
+        post =form.save(commit=False)
+        post.save()
+        return HttpResponseRedirect(post.get_absolute_url())
+    
+    context = {
+        "form": form,
+        "post": post,
+    }
+    return render(request, 'blog/update.html', context)
 
 def delete_post(request):
     return HttpResponse('<h1>We have posts</h1>')
