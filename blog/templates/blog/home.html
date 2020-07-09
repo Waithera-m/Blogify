@@ -10,8 +10,9 @@
                 <div class="card border-info mb-3">
                     <div class="card-body">
                         <h4><a href="{{post.get_absolute_url}}">{{post.title}}</a></h4>
+                        <p style="text-align: right;">Posted {{post.time_stamp|timesince}} ago</br>Updated {{post.updated|timesince}} ago</p>
                         <p>{{post.content}}</p>
-                        <p style="float: right;">Posted {{post.time_stamp|timesince}} ago</br>Updated {{post.updated|timesince}} ago</p>
+                        
                     </div>
                 </div>
             </div>

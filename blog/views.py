@@ -4,6 +4,7 @@ from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.core.exceptions import ObjectDoesNotExist
 from django.views import generic
 from blog.forms import PostForm
+from django.contrib import messages
 
 def posts_home(request):
     posts = Post.objects.all().order_by('-id')
@@ -24,6 +25,7 @@ def create_post(request):
         if form.is_valid():
             post = form.save(commit=False)
             post.save()
+            messages.success(request, "Post Created Successfully")
             return HttpResponseRedirect(post.get_absolute_url())
     else:
         form = PostForm()
@@ -38,6 +40,7 @@ def update_post(request, pk):
     if form.is_valid():
         post =form.save(commit=False)
         post.save()
+        messages.success(request, "Post Edited Successfully")
         return HttpResponseRedirect(post.get_absolute_url())
     
     context = {
