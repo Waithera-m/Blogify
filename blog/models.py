@@ -9,6 +9,9 @@ class Post(models.Model):
     content = models.TextField()
     time_stamp = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    image = models.ImageField(blank=True, null=True, width_field="width_field", height_field="height_field")
+    height_field = models.IntegerField(default=0)
+    width_field = models.IntegerField(default=0)
 
     def __str__(self):
         return self.title
