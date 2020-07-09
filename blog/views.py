@@ -49,6 +49,9 @@ def update_post(request, pk):
     }
     return render(request, 'blog/update.html', context)
 
-def delete_post(request):
-    return HttpResponse('<h1>We have posts</h1>')
+def delete_post(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    post.delete()
+    messages.success(request, "Post Delete Successfully")
+    return redirect('blog:posts_home')
 
