@@ -6,6 +6,7 @@ from django.views import generic
 from blog.forms import PostForm
 from django.contrib import messages
 from django.core.paginator import Paginator, PageNotAnInteger
+from urllib.parse import quote_plus
 
 def posts_home(request):
     posts_list = Post.objects.all().order_by('-id')
@@ -22,13 +23,16 @@ def posts_home(request):
     }
     return render(request, 'blog/home.html', context)
 
-class DetailView(generic.DetailView):
-    model = Post
-    template_name = 'blog/detail.html'
-    context_object_name = 'post'
+def post_detail(request, slug=None):
+    post = get_object_or_404(Post, slug=slug)
+    string_share = quote_plus(post.content)
+    context = {
+        'post': post,
+        'string_share': string_share,
+    }
+    return render(request, 'blog/detail.html', context)
 
 def create_post(request):
-    
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES or None)
         if form.is_valid():
