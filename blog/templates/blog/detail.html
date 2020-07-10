@@ -18,9 +18,13 @@
                 {% if post.image %}
                     <img src="{{post.image.url}}" class="img-fluid">
                 {% endif %}
+                
                 <div class="card-body">
-                    <small style="float: right;" class="text-muted">Posted {{post.time_stamp|timesince}} ago by {{post.user}}</br>Updated {{post.updated|timesince}} ago</small>
+                    <small style="float: right;" class="text-muted">Posted {{post.publish}} ago by {{post.user}}</br>Updated {{post.updated|timesince}} ago</small>
                     <h3 style="font-style: italic;">{{post.title}}</h3>
+                    {% if post.draft %}
+                    <span><small class="badge badge-danger">draft</small></span>
+                    {% endif %}
                     <hr>
                     <p style="float: left;">{{post.content|linebreaks}}</p>
                     <hr>

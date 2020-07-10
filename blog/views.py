@@ -81,7 +81,7 @@ def update_post(request, pk):
 
 def delete_post(request, pk):
     """
-    view function handles teh deletion of a single post
+    view function handles the deletion of a single post
     """
     if not request.user.is_authenticated:
         raise Http404

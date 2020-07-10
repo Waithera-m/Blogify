@@ -17,6 +17,8 @@ class Post(models.Model):
     image = models.ImageField(blank=True, null=True, width_field="width_field", height_field="height_field", upload_to='images/')
     height_field = models.IntegerField(default=0)
     width_field = models.IntegerField(default=0)
+    draft = models.BooleanField(default=False)
+    publish = models.DateField(auto_now_add=False, auto_now=False)
 
     def __str__(self):
         return self.title

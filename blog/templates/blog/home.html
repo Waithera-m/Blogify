@@ -3,7 +3,7 @@
 {% block content %}
     <div class="container">
         <hr>
-        <h1 class="text-center">Welcome to Blog</h1>
+        <h1 class="text-center">Welcome to Blogify</h1>
         <hr>
         {% if messages %}
             {% for message in messages %}
@@ -19,7 +19,10 @@
                         <img src="{{post.image.url}}" class="img-fluid">
                         {% endif %}
                         <div class="card-body">
-                            <h5><a href="{{post.get_absolute_url}}">{{post.title}}</a><small style="float: right;" class="text-muted">Posted {{post.time_stamp|timesince}} ago by {{post.user}}</small></h5>
+                            <h5><a href="{{post.get_absolute_url}}">{{post.title|truncatechars:20}}</a><small style="float: right;" class="text-muted">Posted {{post.time_stamp|timesince}} ago by {{post.user}}</small></h5>
+                            {% if post.draft %}
+                            <span><small class="badge badge-danger">draft</small></span>
+                            {% endif %}
                             <p style="float: left; margin-top: 20px;">{{post.content|linebreaks|truncatechars:80}}</p>
                         </div>
                     </div>
