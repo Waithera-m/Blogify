@@ -23,6 +23,7 @@
                     <h3 style="font-style: italic;">{{post.title}}</h3>
                     <hr>
                     <p style="float: left;">{{post.content|linebreaks}}</p>
+                    <hr>
                     
                     <div id="disqus_thread"></div>
                     <script>
@@ -40,11 +41,13 @@
                     })();
                     </script>
                     <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-
-                    <div class="row" style="float: right">
+                    <hr>
+                    {% if request.user == post.user %}
+                    <div class="row" style="float: left;">
                         <a href="{% url 'blog:update' post.id %}" class="btn btn-info" style="margin-right: 10px;">Edit Post</a>
                         <a href="{% url 'blog:delete' post.id %}" class="btn btn-danger">Delete Post</a>
                     </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
