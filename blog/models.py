@@ -2,11 +2,13 @@ from django.db import models
 from django.urls import reverse
 from django.db.models.signals import pre_save
 from django.utils.text import slugify
+from django.conf import settings
 
 class Post(models.Model):
     """
     class facilitates the creation of post objects
     """
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,  on_delete=models.CASCADE, default=1)
     title = models.CharField(max_length=100)
     slug = models.SlugField(unique=True)
     content = models.TextField()
