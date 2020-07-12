@@ -3,6 +3,15 @@ from django.urls import reverse
 from django.db.models.signals import pre_save
 from django.utils.text import slugify
 from django.conf import settings
+from django.utils import timezone
+import datetime
+
+class PostManager(models.Manager):
+    """
+    class overides objects.all manager to prevent the display of future and draft posts
+    """
+    def active(self, *args, **kwargs):
+        return super(PostManager, self).filter(draft=False)
 
 class Post(models.Model):
     """
@@ -19,6 +28,8 @@ class Post(models.Model):
     width_field = models.IntegerField(default=0)
     draft = models.BooleanField(default=False)
     publish = models.DateField(auto_now_add=False, auto_now=False)
+
+    objects = PostManager()
 
     def __str__(self):
         return self.title

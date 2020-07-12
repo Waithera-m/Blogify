@@ -7,13 +7,21 @@ from blog.forms import PostForm
 from django.contrib import messages
 from django.core.paginator import Paginator, PageNotAnInteger
 from urllib.parse import quote_plus
+from django.utils import timezone
+from django.db.models import Q
 
 def posts_home(request):
     """
     view function gets post saved in teh database
     """
-    posts_list = Post.objects.all().order_by('-id')
-    paginator = Paginator(posts_list, 3)
+    posts_list = Post.objects.active().order_by('-id')
+    if request.user.is_superuser or request.user.is_staff:
+        posts_list = Post.objects.all().order_by('-id')
+    
+    query = request.GET.get("q")
+    if query:
+        posts_list = posts_list.filter(Q(title__icontains=query) | Q(content__icontains=query) | Q(user__username__icontains=query)).distinct()
+    paginator = Paginator(posts_list, 5)
     page = request.GET.get('page')
     
     try:
@@ -31,6 +39,13 @@ def post_detail(request, slug=None):
     view function gets a single post associated with the passed unique slug
     """
     post = get_object_or_404(Post, slug=slug)
+    if post.draft:
+        if not request.user.is_authenticated or not request.user.is_superuser:
+            raise Http404
+    elif post.publish>timezone.now().date():
+        if not request.user.is_authenticated or not request.user.is_superuser:
+            raise Http404
+        
     string_share = quote_plus(post.content)
     context = {
         'post': post,
